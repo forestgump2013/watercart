@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+    xmlns:jee="http://www.springframework.org/schema/jee" 
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop" 
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+  
+        <!-- 开启注解 -->
+   <mvc:annotation-driven/>
+   
+    <!-- 扫描哪些包-->
+   <context:component-scan base-package="tyt.beep.controller"/>
+   <context:component-scan base-package="tyt.beep.service"></context:component-scan>
+   <context:component-scan base-package="tyt.beep.dao" ></context:component-scan>
+  <!--  <bean id="" class="tyt.beep.controller.UserController" ></bean>  -->
+                         
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" 
+       destroy-method="close" >
+          <property name="driverClassName">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:mysql://localhost:3306/world?characterEncoding=utf8</value>
+        </property>
+        <property name="username">
+            <value>root</value>
+        </property>
+        <property name="password">
+            <value>root5678</value>
+        </property>
+     <!--    <property name="maxActive" value="30"/>
+        <property name="maxIdle" value="5"/> -->
+    </bean>
+    
+    <!-- 配置Jdbc模板 -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    
+    <!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
+    p:dataSource-ref="dataSource"></bean>
+    
+    <aop:config proxy-target-class="true" >
+     <aop:pointcut id="serviceMethod" expression="execution(* tyt.beep.service..*(..))" ></aop:pointcut>
+     <aop:advisor pointcut-ref="serviceMethod" advice-ref="txAdvice"></aop:advisor>
+    </aop:config>
+    
+    <tx:advice  id="txAdvice" transaction-manager="transactionManager" >
+      <tx:attributes>
+         <tx:method name="*" ></tx:method>
+      </tx:attributes>
+    </tx:advice> -->
+    
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" ></bean>
+    
+    <!-- 配置视图解析器 -->
+     <!--prefix和suffix：查找视图页面的前缀和后缀（前缀[逻辑视图名]后缀），
+        比如传进来的逻辑视图名为WEB-INF/jsp/index，则该jsp视图页面应该存放在“WEB-INF/jsp/hello.jsp”； -->
+     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+        <property name="prefix" value="/WEB-INF/jsp/"/> 
+       <!-- <property name="prefix" value="/"/> -->
+        <property name="suffix" value=".jsp"/>
+   </bean>
+        
+</beans>
